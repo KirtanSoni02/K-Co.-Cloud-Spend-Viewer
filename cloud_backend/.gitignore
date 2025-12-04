@@ -1,16 +1,16 @@
 # Dependencies
-node_modules/
+node_modules
 .pnp
 .pnp.js
 
 # Testing
-coverage/
+coverage
 
 # Production Build Artifacts
-build/
-dist/
-.next/
-out/
+build
+dist
+.next
+out
 
 # Environment Variables & Secrets
 .env
@@ -29,8 +29,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Editor/IDE Settings
-.vscode/
-.idea/
+.vscode
+.idea
 *.swp
 *.swo
 
