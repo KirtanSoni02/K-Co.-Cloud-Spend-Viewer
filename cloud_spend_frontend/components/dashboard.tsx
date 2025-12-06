@@ -53,7 +53,8 @@ export function Dashboard() {
 
   const queryString = new URLSearchParams(Object.entries(filters).filter(([_, v]) => v !== "all")).toString()
 
-  const { data, isLoading, mutate } = useSWR<ApiResponse>(`http://localhost:5000/api/spend${queryString ? `?${queryString}` : ""}`, fetcher)
+  // const { data, isLoading, mutate } = useSWR<ApiResponse>(`http://localhost:5000/api/spend${queryString ? `?${queryString}` : ""}`, fetcher)
+  const { data, isLoading, mutate } = useSWR<ApiResponse>(`api/spend${queryString ? `?${queryString}` : ""}`, fetcher)
 
 
   const handleFilterChange = (key: keyof Filters, value: string) => {

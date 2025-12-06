@@ -1,5 +1,6 @@
 // This simulates the MongoDB data store
 // In a real MERN app, this would be fetched from MongoDB via Mongoose
+import { loadSpendDataFromCSVs } from "./data-loader";
 
 export interface SpendRecord {
   id: string
@@ -28,60 +29,16 @@ const gcpServices = [
 const teams = ["Core", "Web", "Data", "Mobile", "DevOps"]
 const environments: ("prod" | "staging" | "dev")[] = ["prod", "staging", "dev"]
 
-// Generate realistic spend data for the past 12 months
-function generateSpendData(): SpendRecord[] {
-  const data: SpendRecord[] = []
-  const now = new Date()
-
-  for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
-    const date = new Date(now.getFullYear(), now.getMonth() - monthOffset, 1)
-
-    // Generate AWS spend records
-    for (let i = 0; i < 20; i++) {
-      const day = Math.floor(Math.random() * 28) + 1
-      const recordDate = new Date(date.getFullYear(), date.getMonth(), day)
-
-      data.push({
-        id: `aws-${monthOffset}-${i}`,
-        date: recordDate.toISOString().split("T")[0],
-        cloud_provider: "AWS",
-        service: awsServices[Math.floor(Math.random() * awsServices.length)],
-        team: teams[Math.floor(Math.random() * teams.length)],
-        env: environments[Math.floor(Math.random() * environments.length)],
-        cost_usd: Math.round((Math.random() * 5000 + 100) * 100) / 100,
-      })
-    }
-
-    // Generate GCP spend records
-    for (let i = 0; i < 15; i++) {
-      const day = Math.floor(Math.random() * 28) + 1
-      const recordDate = new Date(date.getFullYear(), date.getMonth(), day)
-
-      data.push({
-        id: `gcp-${monthOffset}-${i}`,
-        date: recordDate.toISOString().split("T")[0],
-        cloud_provider: "GCP",
-        service: gcpServices[Math.floor(Math.random() * gcpServices.length)],
-        team: teams[Math.floor(Math.random() * teams.length)],
-        env: environments[Math.floor(Math.random() * environments.length)],
-        cost_usd: Math.round((Math.random() * 4000 + 80) * 100) / 100,
-      })
-    }
-  }
-
-  return data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}
-
 // Singleton pattern for data store
-let spendData: SpendRecord[] | null = null
+let spendData: SpendRecord[] | null = null;
 
-let isUsingUploadedData = false
+let isUsingUploadedData = false;
 
 export function getSpendData(): SpendRecord[] {
   if (!spendData) {
-    spendData = generateSpendData()
+    spendData = loadSpendDataFromCSVs();  
   }
-  return spendData
+  return spendData;
 }
 
 export function setSpendData(data: SpendRecord[]): void {
@@ -90,7 +47,7 @@ export function setSpendData(data: SpendRecord[]): void {
 }
 
 export function resetSpendData(): void {
-  spendData = generateSpendData()
+  spendData = loadSpendDataFromCSVs()
   isUsingUploadedData = false
 }
 

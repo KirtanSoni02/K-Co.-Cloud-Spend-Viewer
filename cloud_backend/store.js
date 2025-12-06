@@ -12,7 +12,7 @@ function normalizeEnv(env) {
   if (lower.includes("prod")) return "prod";
   if (lower.includes("stag")) return "staging";
   if (lower.includes("dev")) return "dev";
-  return "prod"; // Default
+  return "prod"; 
 }
 
 // ROBUST DATE PARSER 
